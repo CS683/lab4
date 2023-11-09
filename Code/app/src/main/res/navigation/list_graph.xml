@@ -12,6 +12,6 @@
             android:name="large-screen"
             app:argType="boolean"
             android:defaultValue="true"/>
-        </fragment>
+    </fragment>
 
 </navigation>

@@ -1,9 +1,9 @@
 package edu.bu.projectportal.fragments
 
-import android.content.ContentUris
-import android.net.Uri
+import edu.bu.projectportal.datalayer.Project
+import edu.bu.projectportal.viewmodel.ProjectListViewModel
+
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,17 +16,14 @@ import edu.bu.projectportal.R
 import edu.bu.projectportal.databinding.FragmentEditBinding
 import edu.bu.projectportal.viewmodel.CurProjectViewModel
 
-class EditFragment : Fragment() {
+class AddFragment : Fragment(),View.OnClickListener {
     // use ViewBinding
     private var _binding: FragmentEditBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
-    // No need these when using ViewBinding
-//    private lateinit var projTitle: EditText
-//    private lateinit var projDesc: EditText
-//    private lateinit var submit:Button
-//    private lateinit var cancel:Button
+    private lateinit var listViewModel: ProjectListViewModel
+    private lateinit var viewModel: CurProjectViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,36 +38,26 @@ class EditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view,savedInstanceState)
 
-        // No need of findViewById anymore with ViewBinding
-//        projTitle = view.findViewById(R.id.projTitleEdit)
-//        projDesc =  view.findViewById(R.id.projDescEdit)
-//
-//        submit = view.findViewById<Button>(R.id.submit)
-//        cancel = view.findViewById<Button>(R.id.cancel)
-        val position:Int = arguments?.getInt("position")?:0
-        Log.d("TAG","position:"+position)
-
-
-        val viewModel =
+        listViewModel =
+            ViewModelProvider(requireActivity()).get(ProjectListViewModel::class.java)
+        viewModel =
             ViewModelProvider(requireActivity()).get(CurProjectViewModel::class.java)
 
-        viewModel.curProject.observe(viewLifecycleOwner, Observer {
-            binding.projTitleEdit.setText(it.title)
-            binding.projDescEdit.setText(it.description)
-        })
-
-        binding.submit.setOnClickListener {
-            viewModel.updateCurProject( binding.projTitleEdit.text.toString(),
-                binding.projDescEdit.text.toString() )
-            view.findNavController().navigate(R.id.action_editFragment_pop)
-        }
-
-        binding.cancel.setOnClickListener {
-            view.findNavController().
-            navigate(R.id.action_editFragment_pop)
-        }
+        binding.submit.setOnClickListener (this)
+        binding.cancel.setOnClickListener (this)
     }
 
+    override fun onClick(view: View) {
+        if (view.id == R.id.submit) {
+            val project = Project(
+                0, binding.projTitleEdit.text.toString(),
+                binding.projDescEdit.text.toString())
+            listViewModel.addProject(project)
+            viewModel.setCurProject(project)
+        }
+        view.findNavController().navigate(R.id.action_addFragment_pop)
+        activity?.onBackPressed()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

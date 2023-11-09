@@ -1,35 +1,48 @@
 package edu.bu.projectportal.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import edu.bu.projectportal.Project
-
-class CurProjectViewModel: ViewModel(){
+import androidx.lifecycle.viewModelScope
+import edu.bu.projectportal.datalayer.Project
+import edu.bu.projectportal.ProjectPortalApplication
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
+/*
+Create a ViewModel class to keep track of Current Project
+Use AndroidViewModel as the super class, we can pass the
+application object directly to it.
+ */
+class CurProjectViewModel(application: Application): AndroidViewModel(application){
     private val _curProject: MutableLiveData<Project> = MutableLiveData()
-    val curProject: LiveData<Project> = _curProject
+    val curProject: LiveData<Project>
+        get() = _curProject
 
-    // initialize the current project to be
-    // the first project in the list
-    init {
-       _curProject.value = Project.projects[0]
+    val projectPortalRepository =
+        (application as ProjectPortalApplication).projectPortalRepository
 
+    fun initCurProject(project: Project){
+        if (_curProject.value == null)
+            _curProject.value = project
     }
 
     fun setCurProject(project: Project){
         _curProject.value = project
     }
 
-    fun updateCurProject(title:String, desp:String, authors:List<String>, link: String, keywords: Set<String>, isFavorite: Boolean){
+    fun isCurProject(project:Project):Boolean{
+        return _curProject.value?.id == project.id
+    }
+    fun updateCurProject(title:String, desp:String){
         _curProject.value = _curProject.value?.apply{
             this.title = title
             this.description = desp
-            this.authors = authors
-            this.link = link
-            this.keywords = keywords
-            this.isFavorite = isFavorite
         }
-
+        projectPortalRepository.editProject(_curProject.value!!)
     }
+
+
 
 }

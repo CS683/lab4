@@ -5,35 +5,52 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import edu.bu.projectportal.Project
+import edu.bu.projectportal.datalayer.Project
 import edu.bu.projectportal.databinding.FragmentProjItemBinding
 
 
 class MyProjListRecyclerViewAdapter(
-    private val projects: List<Project>,
-    private val onProjectClick:(Project)-> Unit
-)
+    private val onProjectClick: (Project)->Unit)
     : RecyclerView.Adapter<MyProjListRecyclerViewAdapter.ViewHolder>() {
 
+    private val projects = mutableListOf<Project>()
+
+    //changes data source content
+    fun replaceItems(myProjects: List<Project>) {
+        projects.clear()
+        projects.addAll(myProjects)
+        notifyDataSetChanged()
+    }
+
+
+    interface OnProjectClickListener {
+        fun onProjectClick(project: Project);
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
     return ViewHolder(FragmentProjItemBinding.inflate(
         LayoutInflater.from(parent.context), parent, false))
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val project = projects[position]
-        holder.idView.text = (project.id +1).toString()
+        holder.idView.text = project.id.toString()
         holder.contentView.text = project.title
         holder.cardView.setOnClickListener{
             onProjectClick(project)
       }
     }
 
-
     override fun getItemCount(): Int = projects.size
+
+    fun getProject(pos: Int): Project {
+        if (projects.size > 0)
+            return projects[pos]
+        else
+            return Project(0,"","")
+    }
+
 
     inner class ViewHolder(binding: FragmentProjItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
