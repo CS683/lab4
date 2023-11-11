@@ -34,6 +34,10 @@ class ProjectPortalRepository (
         return projectDao.getAllProjects()
     }
 
+    fun getFavoriteProjects(): LiveData<List<Project>> {
+        return projectDao.getFavoriteProjects()
+    }
+
     fun searchProject(projId: Long): LiveData<Project> {
         return projectDao.searchProjectById(projId)
     }

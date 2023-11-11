@@ -18,20 +18,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <CheckBox
+        android:id="@+id/showFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Favorite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.471"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:layout_editor_absoluteY="62dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/projlist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="44dp"
         android:layout_marginRight="16dp"
         android:scrollbars="vertical"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".fragments.ProjListRecyclerViewFragment"
-        tools:listitem="@layout/fragment_proj_item"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:context=".fragments.ProjListRecyclerViewFragment"
+        tools:listitem="@layout/fragment_proj_item" />
     />
 
 <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->

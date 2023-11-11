@@ -2,6 +2,7 @@ package edu.bu.projectportal.datalayer
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 /*
 This is the Database Entry point
@@ -11,6 +12,8 @@ This is the Database Entry point
     entities = [Project::class],
     version = 1
 )
+@TypeConverters(Converters::class)
 abstract class ProjectPortalDatabase: RoomDatabase() {
+
     abstract fun projectDao(): ProjectDao
 }

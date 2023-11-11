@@ -5,12 +5,7 @@ import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.room.Room
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class ProjectPortalProvider: ContentProvider() {
     // Defines a handle to the Room database
@@ -33,16 +28,22 @@ class ProjectPortalProvider: ContentProvider() {
         return true
     }
 
-    override fun getType(p0: Uri): String? {
-        TODO("Not yet implemented")
+    override fun getType(uri: Uri): String? {
+        TODO()
     }
 
 
 
-
     fun constructProject(contentValue:ContentValues): Project {
+        val authors = Converters().fromStringList(PROJECT_AUTHORS)
+        val keywords = Converters().fromStringSet(PROJECT_KEYWORDS)
         return Project(0, contentValue.getAsString(PROJECT_TITLE),
-        contentValue.getAsString(PROJECT_DESC))
+            contentValue.getAsString(PROJECT_DESC),
+            contentValue.getAsString(authors).split(", ").map { it.trim() },
+            contentValue.getAsString(PROJECT_LINK),
+            contentValue.getAsString(keywords).split(", ").map { it.trim() }.toSet(),
+            contentValue.getAsInteger("isFavorite") == 1
+        )
 
     }
 
@@ -97,6 +98,10 @@ class ProjectPortalProvider: ContentProvider() {
         val PROJECT_ID = "id"
         val PROJECT_TITLE = "title"
         val PROJECT_DESC = "desc"
+        val PROJECT_AUTHORS = listOf<String>()
+        val PROJECT_LINK = "www.google.com"
+        val PROJECT_KEYWORDS = setOf<String>()
+        val PROJECT_ISFAVORITE = false
 
         val projectUri = Uri.parse(URL + "/" + TABLE_NAME)
 

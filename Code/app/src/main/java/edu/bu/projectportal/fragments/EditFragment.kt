@@ -57,11 +57,20 @@ class EditFragment : Fragment() {
         viewModel.curProject.observe(viewLifecycleOwner, Observer {
             binding.projTitleEdit.setText(it.title)
             binding.projDescEdit.setText(it.description)
+            binding.projAuthorsEdit.setText(it.authors.joinToString(separator = ", "))
+            binding.projLinkEdit.setText((it.link))
+            binding.projKeywordsEdit.setText(it.keywords.joinToString(separator = ", "))
+            binding.projFavoriteEdit.isChecked = it.isFavorite
         })
 
         binding.submit.setOnClickListener {
             viewModel.updateCurProject( binding.projTitleEdit.text.toString(),
-                binding.projDescEdit.text.toString() )
+                binding.projDescEdit.text.toString(),
+                binding.projAuthorsEdit.text.split(", ").map { it.trim() },
+                binding.projLinkEdit.text.toString(),
+                binding.projKeywordsEdit.text.split(", ").map { it.trim() }.toSet(),
+                binding.projFavoriteEdit.isChecked
+            )
             view.findNavController().navigate(R.id.action_editFragment_pop)
         }
 

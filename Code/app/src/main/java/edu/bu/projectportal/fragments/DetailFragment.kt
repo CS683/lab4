@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         val projTitle = view.findViewById<TextView>(R.id.projTitle)
         val projDesc =  view.findViewById<TextView>(R.id.projDesc)
         val editProj = view.findViewById<ImageButton>(R.id.editProj)
+        val authorsProj = view.findViewById<TextView>(R.id.projAuthors)
+        val linkProj = view.findViewById<TextView>(R.id.projLink)
+        val keywordsProj = view.findViewById<TextView>(R.id.projKeywords)
+        val favoriteProj = view.findViewById<ImageView>(R.id.favoriteStar)
 
 //        val position:Int = arguments?.getInt("position")?:0
 //        Log.d("TAG","position:"+position)
@@ -34,6 +39,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         viewModel.curProject.observe(viewLifecycleOwner, Observer {
             projTitle.text =  it?.title?:""
             projDesc.text = it?.description?:""
+            authorsProj.text = it?.authors?.joinToString(separator = ", ")
+            linkProj.text = it?.link?:""
+            keywordsProj.text = it?.keywords?.joinToString(separator = ", ")
+            favoriteProj.isSelected = it.isFavorite
         })
 
 

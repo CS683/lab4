@@ -35,12 +35,17 @@ class CurProjectViewModel(application: Application): AndroidViewModel(applicatio
     fun isCurProject(project:Project):Boolean{
         return _curProject.value?.id == project.id
     }
-    fun updateCurProject(title:String, desp:String){
+    fun updateCurProject(title:String, desp:String, authors:List<String>, link: String, keywords: Set<String>, isFavorite: Boolean){
         _curProject.value = _curProject.value?.apply{
             this.title = title
             this.description = desp
+            this.authors = authors
+            this.link = link
+            this.keywords = keywords
+            this.isFavorite = isFavorite
         }
-        projectPortalRepository.editProject(_curProject.value!!)
+        _curProject.value?.let { projectPortalRepository.editProject(it) }
+
     }
 
 

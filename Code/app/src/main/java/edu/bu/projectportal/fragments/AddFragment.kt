@@ -4,12 +4,10 @@ import edu.bu.projectportal.datalayer.Project
 import edu.bu.projectportal.viewmodel.ProjectListViewModel
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import edu.bu.projectportal.R
@@ -51,7 +49,12 @@ class AddFragment : Fragment(),View.OnClickListener {
         if (view.id == R.id.submit) {
             val project = Project(
                 0, binding.projTitleEdit.text.toString(),
-                binding.projDescEdit.text.toString())
+                binding.projDescEdit.text.toString(),
+                binding.projAuthorsEdit.text.split(", ").map { it.trim() },
+                binding.projLinkEdit.text.toString(),
+                binding.projKeywordsEdit.text.split(", ").map { it.trim() }.toSet(),
+                binding.projFavoriteEdit.isChecked
+                )
             listViewModel.addProject(project)
             viewModel.setCurProject(project)
         }

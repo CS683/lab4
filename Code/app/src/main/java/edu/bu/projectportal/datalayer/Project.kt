@@ -15,7 +15,12 @@ data class Project(
     val id: Int = 0,
     var title: String = "",
     @ColumnInfo(name="desc")
-    var description: String = ""){
+    var description: String = "",
+    var authors: List<String> = listOf("Shanghua Yang"),
+    var link: String = "www.google.com",
+    var keywords: Set<String> = setOf("project"),
+    var isFavorite: Boolean = false
+    ){
     var docId:String = ""
 }
 //{

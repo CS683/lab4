@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.slidingpanelayout.widget.SlidingPaneLayout
+import edu.bu.projectportal.R
 import edu.bu.projectportal.adapter.MyProjListRecyclerViewAdapter
 import edu.bu.projectportal.datalayer.Project
-import edu.bu.projectportal.R
 import edu.bu.projectportal.databinding.FragmentProjListRecyclerViewBinding
 import edu.bu.projectportal.viewmodel.CurProjectViewModel
 import edu.bu.projectportal.viewmodel.ProjectListViewModel
@@ -78,6 +78,11 @@ class ProjListRecyclerViewFragment : Fragment() {
 //        val viewModel:CurProjectViewModel by activityViewModels()
 //        val listViewModel: ProjectListViewModel by viewModels()
 
+        val showFavorite = binding.showFavorite
+
+        showFavorite.setOnCheckedChangeListener { _, isChecked ->
+            listViewModel.showOnlyFavorites(isChecked)
+        }
 
         binding.projlist.apply {
             layoutManager = when {
@@ -112,6 +117,8 @@ class ProjListRecyclerViewFragment : Fragment() {
             })
 
             ItemTouchHelper(SwipeToDeleteCallback()).attachToRecyclerView(this)
+
+
 
         }
     }
